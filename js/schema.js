@@ -145,11 +145,11 @@ var Schema = Class.extend({
 		} else {
 			for (var p in s.members) {
 				if (typeof o[p] === 'undefined') {
+					valid = false;
 					ctxt.error("Missing member in " + ctxt.chainName() + ': ' + p);
-					console.log(o);
 				} else {
 					opts.name = p;
-					valid = ctxt.validateField(s.members[p], o[p], opts);
+					valid = valid && ctxt.validateField(s.members[p], o[p], opts);
 					if (!valid) {
 						return valid;
 					}
@@ -241,7 +241,14 @@ var Schema = Class.extend({
 		var ctxt = this;
 		var valid = true;
 		var fName = typeof opts.name !== 'undefined' ? opts.name : 'ROOT'
+		
+		
+		if (typeof o === 'undefined') {
+			alert("MISSING: " + fName);	
+		}
+		
 		ctxt.chain.push(fName);
+		console.log(ctxt.chainName(), o);
 		switch (s.type.trim().toLowerCase()) {
 			case "object": valid = ctxt.validateObject(s, o, opts); break;
 			case "integer": valid = ctxt.validateInteger(s, o, opts); break;
