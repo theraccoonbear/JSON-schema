@@ -20,7 +20,7 @@ Additional planned types to be implemented are `Float` and `Enum`.
 
 ### Sample
 
-```json
+```javascript
 {
 	name: "Character",
 	type: "Object",
