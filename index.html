@@ -1,0 +1,145 @@
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <title>Title</title>
+  <meta name="description" content="">
+
+  <!-- Mobile viewport optimized: h5bp.com/viewport -->
+  <meta name="viewport" content="width=device-width">
+
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
+	<link rel="stylesheet" href="css/normalize.css">
+	
+	<!-- Uncomment for Kalendae -->
+	<!-- <link rel="stylesheet" href="css/kalendae.css"> -->
+  <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
+
+  <!-- All JavaScript at the bottom, except this Modernizr build.
+       Modernizr enables HTML5 elements & feature detects for optimal performance.
+       Create your own custom Modernizr build: www.modernizr.com/download/ -->
+  <script src="js/modernizr-2.5.3.min.js"></script>
+</head>
+<body>
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+  
+	
+	<header>
+		
+	</header>
+	
+	
+	<style type="text/css">
+		.form {
+			padding: 10px;
+			border: 2px solid #000;
+			width: 300px;
+		}
+		
+		.loginBox {
+		  display: none;
+		}
+		
+		label span {
+			width: 80px;
+			display: inline-block;
+		}
+		.characterBox {
+			/*display: none;*/
+		}
+		
+		textarea {
+			font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+		}
+	</style>
+	
+
+  <div role="main">
+		<h1>JSON-Schema</h1>
+    <form>
+			<label for="data"><span>Object:</span> <textarea id="data" rows="15" cols="100"></textarea></label><br>
+			<input type="submit" id="mock" value="Mock an Object" /> <input type="submit" id="validate" value="Validate an Object" />
+			<pre id="response"></pre>
+		</form>
+	</div>
+	<div id="resultBox"></div>
+  </div>
+  <footer>
+
+  </footer>
+
+
+  <!-- JavaScript at the bottom for fast page loading -->
+
+  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
+  <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>-->
+	<!-- scripts concatenated and minified via build script -->
+  <script src="js/jquery-1.10.2.min.js"></script>
+  <script src="js/Class.js"></script>
+	<script src="js/schema.js"></script>
+	<script>
+		
+		
+		var sample_char = {
+			player: "Joe Blow",
+			name: "Havershaft 'dul Bram",
+			race: "Mountain Dwarf",
+			classes: [
+				{name: "Fighter", XP: 5036, level: 3, label: "Swordsman"},
+				{name: "Thief", XP: 5036, level: 3, label: "Cutpurse"},
+			],
+			hp: {current: 9, max: 20},
+			move: 11,
+			thac0: 18,
+			abilities: {
+				str: {score: 18, bonus: 23, hit: 1, dmg: 3, carry: 1000, doors: "1-3", bars: 20},
+				int: {score: 13},
+				wis: {score: 6, mental: -1},
+				dex: {score: 17, reaction: 2, ac: -3},
+				con: {score: 12, shock: 80, resurrection: 85},
+				cha: {score: 7, henchman: 3, loyalty: -10, reaction: -5}
+			}
+		};
+		
+		
+		$(function() {
+			
+			var cSchema = new Schema({url: 'js/schemas/character.js', debug: 0});
+
+			var $data = $('#data');
+			
+			var $resultBox = $('#resultBox');
+			
+			$('form').submit(function(e) { e.preventDefault(); });
+				
+			$('#mock').click(function(e) {
+				var char = cSchema.mock();
+				$data.val(JSON.stringify(char, undefined, 2));
+				e.preventDefault();
+			});
+			
+			$('#validate').click(function(e) {
+				var char = cSchema.mock();
+				var obj = JSON.parse($data.val());
+				if (cSchema.validate(obj)) {
+					$resultBox.html("Passes validation!");
+				} else {
+					$resultBox.html("<strong>ERRORS</strong><br>\n" + cSchema.errors.join("<br>\n"));
+				}
+				e.preventDefault();
+			});
+		});
+		
+	</script>
+
+</body>
+</html>
