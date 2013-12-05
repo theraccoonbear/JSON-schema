@@ -123,12 +123,23 @@ var Schema = Class.extend({
 		return obj;
 	},
 	
-	mock: function() {
+	mock: function(o) {
 		var ctxt = this;
+		var defaults = {
+			hooks: true
+		};
+		var opts = $.extend({}, defaults, o);
+			
 		var obj = {};
 		ctxt.chain = [];
 		obj = ctxt.mockField(ctxt.parsed, ctxt.parsed.name ? ctxt.parsed.name : 'ROOT');
 		ctxt.chain = [];
+		if (opts.hooks) {
+			obj.schema = ctxt;
+			obj.validate = function() {
+				return ctxt.validate(obj);
+			};
+		}
 		return obj;
 	},
 	
